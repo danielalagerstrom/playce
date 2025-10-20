@@ -1,4 +1,4 @@
-import { useLoaderData } from "react-router";
+import { useLoaderData, useActionData } from "react-router";
 import { ChatMessages, ChatInput } from "../components/Chat.jsx";
 
 /**
@@ -71,26 +71,85 @@ export async function clientLoader({ params }) {
 }
 
 /**
+ * CLIENT ACTION FUNCTION
+ *
+ * Handles form submissions to create new messages.
+ * Key concepts:
+ * 1. FORM DATA: Extract data from form submission
+ * 2. POST REQUEST: Send data to Supabase to create new message
+ * 3. AUTOMATIC REVALIDATION: React Router re-runs loader after action completes
+ * 4. OPTIMISTIC UI: Form clears immediately, data refreshes automatically
+ *
+ * The action runs:
+ * - When a Form with method="post" is submitted
+ * - Before the loader re-runs (automatic revalidation)
+ */
+export async function clientAction({ params, request }) {
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+  const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+  // Extract form data from the request
+  const formData = await request.formData();
+  const content = formData.get("message");
+
+    // Validate message content
+  if (!content || !content.trim()) {
+    return { error: "Message cannot be empty" };
+  }
+
+  // Create the message object
+  const newMessage = {
+    thread_id: params.threadId,
+    type: "user",
+    content: content.trim(),
+  };
+
+  // POST to Supabase to create the message
+try {
+    const response = await fetch(`${supabaseUrl}/rest/v1/messages`, {
+      method: "POST",
+      headers: {
+        apikey: supabaseKey,
+        Authorization: `Bearer ${supabaseKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newMessage),
+    });
+
+    if (!response.ok) {
+      return { error: `Failed to create message: ${response.status}` };
+    }
+
+    // Return success - loader will automatically revalidate
+    return { success: true };
+  } catch (error) {
+    return { error: error.message };
+
+}
+}
+
+
+/**
  * Chat Thread Route Component
  *
  * Displays a conversation thread with messages from the database.
+ * Now includes error handling from form submissions.
  *
  * Key concepts:
  * 1. useLoaderData() HOOK: Accesses data returned from clientLoader
- * 2. NO LOADING STATES NEEDED: Data is guaranteed to be available
- * 3. DATA READY ON RENDER: Component receives data before it renders
- * 4. REAL DATABASE DATA: Shows actual messages from Supabase
+ * 2. useActionData() HOOK: Accesses result returned from clientAction
+ * 3. ERROR DISPLAY: Shows validation or API errors to the user
+ * 4. USER FEEDBACK: Informs users when something goes wrong
  */
+
 export default function ChatThread() {
   // Access the thread and messages data from the loader
   const { thread, messages } = useLoaderData();
 
-  // For now, we keep the addMessage handler but it won't persist
-  // This will be replaced with clientAction in a later step
-  const addMessage = (content) => {
-    console.log("Message submitted:", content);
-    console.log("(Data mutations will be implemented in the next phase)");
-  };
+   // Access the action result (success or error)
+  const actionData = useActionData();
+
+
 
   return (
     <main className="chat-container">
@@ -98,7 +157,10 @@ export default function ChatThread() {
         <h2>{thread.title}</h2>
       </div>
       <ChatMessages messages={messages} />
-      <ChatInput onAddMessage={addMessage} />
+       <ChatInput />
+      {actionData?.error && (
+        <div className="error-message">Error: {actionData.error}</div>
+      )}
     </main>
   );
 }
