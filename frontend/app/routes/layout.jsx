@@ -8,8 +8,9 @@ import Sidebar from "../components/Sidebar.jsx";
  * Key concepts:
  * 1. PARENT ROUTE LOADER: Runs before any child route loaders
  * 2. SHARED DATA: Data is available to this component and can be accessed by children
- * 3. SIMULATED API CALL: We add a delay to mimic fetching from a database
- * 4. MOCK DATA: Returns static data that will later come from Supabase
+ * 3. SUPABASE REST API: Direct HTTP calls to Supabase database
+ * 4. ENVIRONMENT VARIABLES: Secure way to store API credentials
+ * 5. QUERY PARAMETERS: Using URL parameters to filter and sort data
  *
  * This loader runs:
  * - On initial page load
@@ -17,7 +18,7 @@ import Sidebar from "../components/Sidebar.jsx";
  * - When React Router revalidates (after mutations)
  */
 export async function clientLoader() {
-   // Get Supabase credentials from environment variables
+  // Get Supabase credentials from environment variables
   const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
   const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
@@ -33,7 +34,7 @@ export async function clientLoader() {
       apikey: supabaseKey, // Required for authentication
       Authorization: `Bearer ${supabaseKey}`, // Required for authorization
     },
-   });
+  });
 
   // Check if the request was successful
   if (!response.ok) {
