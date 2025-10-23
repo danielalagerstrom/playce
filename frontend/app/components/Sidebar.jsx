@@ -53,7 +53,7 @@ function ChatThreadItem({ thread }) {
   const { id, title } = thread;
   const fetcher = useFetcher();
 
-   // Check if this specific thread is being deleted
+  // Check if this specific thread is being deleted
   const isDeleting =
     fetcher.state !== "idle" && fetcher.formData?.get("threadId") === id;
 
@@ -74,7 +74,7 @@ function ChatThreadItem({ thread }) {
         >
           {title}
         </NavLink>
-         <fetcher.Form method="post">
+        <fetcher.Form method="post">
           {/* Hidden inputs to identify the action and thread */}
           <input type="hidden" name="intent" value="delete" />
           <input type="hidden" name="threadId" value={id} />
@@ -136,7 +136,7 @@ function ChatThreadsList({ threads = [] }) {
       <ul>
         {/* Render filtered threads - no callback prop needed */}
         {filteredThreads.map((thread) => (
-           <ChatThreadItem key={thread.id} thread={thread} />
+          <ChatThreadItem key={thread.id} thread={thread} />
         ))}
       </ul>
     </nav>
@@ -169,7 +169,7 @@ function SidebarFooter() {
 /**
  * Main Sidebar Component
  *
-* Now simplified with NO CALLBACK DRILLING! Key concepts:
+ * Now simplified with NO CALLBACK DRILLING! Key concepts:
  * 1. DESTRUCTURING: Only needs threads data
  * 2. NO CALLBACKS: Children use useFetcher to communicate with routes
  * 3. SIMPLIFIED PROPS: Cleaner component interface
@@ -179,7 +179,7 @@ function SidebarFooter() {
 export default function Sidebar({ threads }) {
   return (
     <aside className="sidebar">
-      {/* Component composition - no callback prop drilling */}
+      {/* Component composition - no callback prop drilling needed */}
       <SidebarHeader />
       <ChatThreadsList threads={threads} />
       <SidebarFooter />

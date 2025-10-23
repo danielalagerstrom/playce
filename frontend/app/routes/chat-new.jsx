@@ -1,6 +1,5 @@
-import { useState } from "react";
-import { ChatMessages, ChatInput } from "../components/Chat.jsx";
 import { useActionData, redirect } from "react-router";
+import { ChatInput, ChatMessages } from "../components/Chat.jsx";
 
 /**
  * CLIENT ACTION FUNCTION
@@ -94,10 +93,8 @@ export async function clientAction({ request }) {
  * 3. FORM SUBMISSION: Uses ChatInput component with Form
  * 4. ERROR DISPLAY: Shows validation or API errors to user
  */
-
 export default function ChatNew() {
-
-// Access action result for error display
+  // Access action result for error display
   const actionData = useActionData();
 
   return (
@@ -113,7 +110,4 @@ export default function ChatNew() {
       )}
     </main>
   );
- }
-
-
-
+}

@@ -56,7 +56,8 @@ function ChatMessages({ messages = [] }) {
 /**
  * ChatInput Component
  *
-* Now uses React Router Form for data mutations:
+ * Form component that handles user input for sending messages.
+ * Now uses React Router Form for data mutations:
  * 1. FORM COMPONENT: React Router's Form for seamless data mutations
  * 2. METHOD="POST": Triggers the route's clientAction when submitted
  * 3. AUTOMATIC REVALIDATION: Data refreshes after successful submission
@@ -65,23 +66,22 @@ function ChatMessages({ messages = [] }) {
  */
 function ChatInput() {
   return (
-     <div className="chat-input-container">
+    <div className="chat-input-container">
       <Form method="post" className="chat-input-wrapper">
-         <textarea
+        <textarea
           name="message"
           className="chat-input"
           placeholder="Type your message here..."
           rows="1"
           required
         />
-          <button className="send-button" type="submit">
+        <button className="send-button" type="submit">
           Send
         </button>
-        </Form>
+      </Form>
     </div>
   );
 }
- 
 
 /**
  * Named Exports

@@ -1,5 +1,49 @@
-import { useLoaderData, useActionData } from "react-router";
+import {
+  useLoaderData,
+  useActionData,
+  Link,
+  useRouteError,
+  href,
+} from "react-router";
 import { ChatMessages, ChatInput } from "../components/Chat.jsx";
+
+/**
+ * ERROR BOUNDARY COMPONENT
+ *
+ * Handles errors that occur in this route, including 404 errors.
+ * Key concepts:
+ * 1. ERROR BOUNDARY: React Router's built-in error handling mechanism
+ * 2. useRouteError() HOOK: Access the error object thrown in loader/action
+ * 3. 404 HANDLING: Special case for missing threads (deleted or never existed)
+ * 4. USER FEEDBACK: Show helpful message and recovery options
+ *
+ * This component renders when:
+ * - Thread is not found (404 error)
+ * - API request fails
+ * - Any error is thrown in loader or action
+ */
+export function ErrorBoundary() {
+  const error = useRouteError();
+
+  // Check if this is a 404 error (thread not found)
+  const isNotFound = error?.status === 404;
+
+  return (
+    <div className="chat-container">
+      <div className="chat-thread-header">
+        <h2>{isNotFound ? "Thread Not Found" : "Something Went Wrong"}</h2>
+        <p>
+          {isNotFound
+            ? "This conversation may have been deleted or never existed."
+            : error?.message || "An unexpected error occurred."}
+        </p>
+        <p>
+          <Link to={href("/chat/new")}>Start a new chat</Link>
+        </p>
+      </div>
+    </div>
+  );
+}
 
 /**
  * CLIENT LOADER FUNCTION
@@ -92,7 +136,7 @@ export async function clientAction({ params, request }) {
   const formData = await request.formData();
   const content = formData.get("message");
 
-    // Validate message content
+  // Validate message content
   if (!content || !content.trim()) {
     return { error: "Message cannot be empty" };
   }
@@ -105,7 +149,7 @@ export async function clientAction({ params, request }) {
   };
 
   // POST to Supabase to create the message
-try {
+  try {
     const response = await fetch(`${supabaseUrl}/rest/v1/messages`, {
       method: "POST",
       headers: {
@@ -124,10 +168,8 @@ try {
     return { success: true };
   } catch (error) {
     return { error: error.message };
-
+  }
 }
-}
-
 
 /**
  * Chat Thread Route Component
@@ -141,15 +183,12 @@ try {
  * 3. ERROR DISPLAY: Shows validation or API errors to the user
  * 4. USER FEEDBACK: Informs users when something goes wrong
  */
-
 export default function ChatThread() {
   // Access the thread and messages data from the loader
   const { thread, messages } = useLoaderData();
 
-   // Access the action result (success or error)
+  // Access the action result (success or error)
   const actionData = useActionData();
-
-
 
   return (
     <main className="chat-container">
@@ -157,9 +196,9 @@ export default function ChatThread() {
         <h2>{thread.title}</h2>
       </div>
       <ChatMessages messages={messages} />
-       <ChatInput />
+      <ChatInput />
       {actionData?.error && (
-        <div className="error-message">Error: {actionData.error}</div>
+        <div className="error-message">{actionData.error}</div>
       )}
     </main>
   );

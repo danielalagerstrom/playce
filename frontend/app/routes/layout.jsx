@@ -99,12 +99,11 @@ export async function clientAction({ request }) {
   return null;
 }
 
-
 /**
  * Layout Component
  *
- * Now uses DATA LOADING and MUTATIONS
- * 
+ * Now uses DATA LOADING and MUTATIONS!
+ *
  * Key concepts:
  * 1. useLoaderData() HOOK: Accesses data from clientLoader
  * 2. NO STATE MANAGEMENT: Data comes from loader, not useState
