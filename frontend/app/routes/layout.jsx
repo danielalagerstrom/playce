@@ -1,5 +1,7 @@
 import { Outlet, useLoaderData, redirect } from "react-router";
 import Sidebar from "../components/Sidebar.jsx";
+import Navbar from "../components/Navbar.jsx";
+import Homepage from "../components/Homepage.jsx";
 
 /**
  * CLIENT LOADER FUNCTION

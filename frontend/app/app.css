@@ -468,3 +468,29 @@ p {
     font-size: 1.5rem;
   }
 }
+
+.navbar {
+  position: sticky;
+  bottom: 0;
+  width: 100%;
+  height: 60px;
+  display: flex;
+  background: #FFE600;
+  align-items: center;
+  z-index: 10;
+}
+
+.navbar a {
+  color: #f7f7f7;
+  font-size: 0.85rem;
+  text-align: center;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.navbar a.active {
+  color: #ffe600;
+}

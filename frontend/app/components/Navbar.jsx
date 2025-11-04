@@ -1,6 +1,6 @@
 // Navbar.jsx
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router";
 
 export default function Navbar() {
   const location = useLocation();
