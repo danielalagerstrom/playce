@@ -31,7 +31,7 @@ export function ErrorBoundary() {
   return (
     <div className="chat-container">
       <div className="chat-thread-header">
-        <h2>{isNotFound ? "Thread Not Found" : "Something Went Wrong"}</h2>
+        <h2>{isNotFound ? "Chat Not Found" : "Something Went Wrong"}</h2>
         <p>
           {isNotFound
             ? "This conversation may have been deleted or never existed."

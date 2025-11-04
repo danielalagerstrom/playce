@@ -469,28 +469,51 @@ p {
   }
 }
 
+/* Layout container */
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* full viewport height */
+}
+
+/* Main content fills remaining space */
+.main-content {
+  flex: 1;
+  padding-bottom: 60px; /* ensure content doesn't overlap navbar */
+}
+
+/* Navbar styles */
 .navbar {
   position: sticky;
   bottom: 0;
   width: 100%;
   height: 60px;
   display: flex;
-  background: #FFE600;
+  justify-content: space-around; /* space between links */
   align-items: center;
+  background: #FFE600;
   z-index: 10;
 }
 
+/* Navbar links */
 .navbar a {
   color: #f7f7f7;
   font-size: 0.85rem;
   text-align: center;
-  text-decoration: none;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 2px;
+  text-decoration: none;
+  transition: color 0.2s ease;
 }
 
+/* Active link */
 .navbar a.active {
-  color: #ffe600;
+  color: #000; /* or any color to indicate active state */
+}
+
+/* Optional: hover effect */
+.navbar a:hover {
+  color: #000;
 }
