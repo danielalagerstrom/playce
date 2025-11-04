@@ -1,23 +1,30 @@
+/* ===========================
+   PLAYCE THEME — FULL CSS
+   =========================== */
+
+/* Google Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;500;600&display=swap");
+
 /* CSS Variables */
 :root {
-  --bg-primary: #ffffff;
-  --bg-secondary: #f9f9f9;
-  --bg-hover: #f0f0f0;
-  --bg-message-user: #f1f3f5;
+  --bg-primary: #090c08;
+  --bg-secondary: #11150f;
+  --bg-hover: #1b1f18;
+  --bg-message-user: #161a14;
   --bg-message-bot: transparent;
-  --bg-button-primary: #4b5563;
-  --bg-button-primary-hover: #374151;
-  --bg-button-disabled: #d1d5db;
+  --bg-button-primary: #ffe600;
+  --bg-button-primary-hover: #e0cc00;
+  --bg-button-disabled: #555;
 
-  --text-primary: #0d0d0d;
-  --text-muted: #9ca3af;
-  --text-button: #ffffff;
+  --text-primary: #f7f7f7;
+  --text-muted: #c3c3c3;
+  --text-button: #090c08;
 
-  --border-light: #e5e5e5;
-  --border-medium: #d1d5db;
-  --border-focus: #6b7280;
+  --border-light: #2a2a2a;
+  --border-medium: #3a3a3a;
+  --border-focus: #ffe600;
 
-  --shadow-focus: rgba(107, 114, 128, 0.1);
+  --shadow-focus: rgba(255, 230, 0, 0.15);
 }
 
 /* Reset and base styles */
@@ -28,12 +35,38 @@
 }
 
 body {
-  font-family:
-    -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
-    "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  line-height: 1.5;
+}
+
+/* Typography */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Bebas Neue", sans-serif;
+  color: #ffe600;
+  letter-spacing: 0.5px;
+}
+
+h1 {
+  font-size: 32px;
+}
+h2 {
+  font-size: 28px;
+}
+h3 {
+  font-size: 24px;
+}
+p {
+  color: var(--text-primary);
 }
 
 /* Layout styles */
@@ -165,6 +198,7 @@ body {
 /* Active thread link styling */
 .chat-thread-link-active {
   font-weight: bold;
+  color: var(--text-button);
 }
 
 /* Pending thread link styling - pulsating animation */
@@ -202,22 +236,13 @@ body {
     background 0.1s ease;
 }
 
-/* Show delete button on thread item hover */
 .chat-thread-item-content:hover .delete-thread-btn {
   opacity: 1;
 }
 
-/* Delete button hover state */
 .delete-thread-btn:hover {
   background: rgba(239, 68, 68, 0.1);
   color: #ef4444;
-}
-
-/* Focus styles for accessibility */
-.delete-thread-btn:focus {
-  outline: 2px solid var(--border-focus);
-  outline-offset: 1px;
-  opacity: 1;
 }
 
 /* Sidebar footer */
@@ -259,7 +284,6 @@ body {
 .chat-thread-header {
   text-align: center;
   padding: 3rem 2rem;
-  text-align: center;
   color: var(--text-muted);
 }
 
@@ -299,7 +323,7 @@ body {
 .user-message .message-content {
   background-color: var(--bg-message-user);
   color: var(--text-primary);
-  border: 1px solid var(--border-light);
+  border: 1px solid var(--border-medium);
   border-bottom-right-radius: 4px;
 }
 
@@ -314,7 +338,7 @@ body {
 .chat-input-container {
   padding: 1rem;
   border-top: 1px solid var(--border-light);
-  background: var(--bg-primary);
+  background: var(--bg-secondary);
   position: sticky;
   bottom: 0;
 }
@@ -337,6 +361,8 @@ body {
   font-family: inherit;
   min-height: 44px;
   max-height: 120px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
 }
 
 .chat-input:focus {
@@ -351,7 +377,7 @@ body {
   border-radius: 12px;
   padding: 0.75rem 1.5rem;
   font-size: 0.9rem;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   transition: background 0.2s ease;
   height: 44px;
@@ -368,12 +394,12 @@ body {
 
 /* Error message */
 .error-message {
-  background: #fee;
-  color: #c00;
+  background: rgba(255, 0, 0, 0.15);
+  color: #ff5555;
   padding: 0.75rem 1rem;
   margin: 1rem;
   border-radius: 8px;
-  border: 1px solid #fcc;
+  border: 1px solid rgba(255, 0, 0, 0.3);
   font-size: 0.875rem;
 }
 
@@ -382,16 +408,15 @@ body {
   max-width: 900px;
   margin: 2.5rem auto;
   padding: 2rem;
-  background: var(--bg-primary);
+  background: var(--bg-secondary);
   border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.2);
   color: var(--text-primary);
 }
 
 .about-page h1 {
-  font-size: 1.75rem;
+  font-size: 2rem;
   margin-bottom: 0.5rem;
-  color: var(--text-primary);
 }
 
 .about-page p {
@@ -403,8 +428,8 @@ body {
 .about-section {
   margin-top: 1.5rem;
   padding: 1rem;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-light);
+  background: var(--bg-primary);
+  border: 1px solid var(--border-medium);
   border-radius: 8px;
 }
 
@@ -422,7 +447,7 @@ body {
 }
 
 .about-features li {
-  background: var(--bg-primary);
+  background: var(--bg-secondary);
   padding: 0.75rem 1rem;
   border-radius: 8px;
   border: 1px solid var(--border-medium);
