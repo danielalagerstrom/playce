@@ -1,60 +1,65 @@
 // app/routes/events.jsx
-import React from "react";
+import { useLoaderData } from "react-router";
 import EventCard from "../components/EventCard.jsx";
 
 /**
- * Sample events data
- * Replace with dynamic data later if needed
+ * CLIENT LOADER FUNCTION
+ *
+ * Fetches all events from Supabase before rendering the page.
+ * Key concepts:
+ * 1. DATA LOADING: Uses fetch to get events from Supabase REST API
+ * 2. SORTING: Orders events by date ascending
+ * 3. ERROR HANDLING: Throws error if request fails
  */
-const sampleEvents = [
-  {
-    id: 1,
-    title: "Catan Marathon",
-    date: "2025-11-15",
-    time: "18:00",
-    location: "📍 Skovvejen 10, 1. sal, 8000 Aarhus C",
-    description: "Join us for a marathon session of Catan with fellow board game enthusiasts!",
-  },
-  {
-    id: 2,
-    title: "Trivia Night",
-    date: "2025-11-18",
-    time: "19:00",
-    location: "📍 Møllehavevej 15, 8200 Aarhus N",
-    description: "Test your knowledge with fun trivia questions and meet new people!",
-  },
-  {
-    id: 3,
-    title: "Monopoly Evening",
-    date: "2025-11-20",
-    time: "17:00",
-    location: "Playce Game Lounge",
-    description: "Compete with friends or strangers in a friendly game of Monopoly.",
-  },
-];
+export async function clientLoader() {
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+  const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+  const url = `${supabaseUrl}/rest/v1/events?select=*&order=date.asc`;
+
+  const response = await fetch(url, {
+    headers: {
+      apikey: supabaseKey,
+      Authorization: `Bearer ${supabaseKey}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch events: ${response.status}`);
+  }
+
+  const events = await response.json();
+  return { events };
+}
 
 /**
  * Events Page Component
  *
- * Renders a list of events using reusable EventCard components.
+ * Displays all events in a responsive card grid.
  * Key concepts:
- * - Sample data for now (no API)
- * - Reusable component rendering
- * - Semantic HTML with <main> and <section>
+ * 1. useLoaderData() hook: Accesses events fetched by clientLoader
+ * 2. RESPONSIVE GRID: 1 column mobile, 2 tablet, 3 desktop
+ * 3. EventCard: Each event is rendered as a card
  */
 export default function Events() {
-  return (
-    <main className="px-4 py-6">
-      <h1 className="text-2xl font-semibold mb-6 text-center">Upcoming Events</h1>
+  const { events } = useLoaderData();
 
-      <section className="grid gap-4">
-        {sampleEvents.map((event) => (
+  if (!events || events.length === 0) {
+    return <p className="text-center mt-8">No events found 😕</p>;
+  }
+
+  return (
+    <section className="px-4 py-6">
+      <h1 className="text-2xl font-semibold mb-6 text-center">Upcoming Events</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        {events.map((event) => (
           <EventCard key={event.id} event={event} />
         ))}
-      </section>
-    </main>
+      </div>
+    </section>
   );
 }
+
 
 
 
