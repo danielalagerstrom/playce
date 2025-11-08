@@ -1,35 +1,65 @@
-// events.jsx
-import React, { useEffect, useState } from "react";
-import { supabase } from "../supabaseClient";
+import React from "react";
 import EventCard from "../components/EventCard.jsx";
 
-export default function Events() {
-  const [events, setEvents] = useState([]);
-  const [loading, setLoading] = useState(true);
+/**
+ * CLIENT LOADER FUNCTION
+ *
+ * Fetches all upcoming events from Supabase before rendering.
+ * Key concepts:
+ * 1. DATA LOADING: Runs before the component renders
+ * 2. SUPABASE REST API: Uses HTTP fetch requests instead of supabase client
+ * 3. ENVIRONMENT VARIABLES: Securely load API credentials
+ * 4. SORTING: Orders events by date ascending
+ * 5. ERROR HANDLING: Gracefully handles failed requests
+ *
+ * The loader runs:
+ * - On initial page load
+ * - When navigating to /events
+ * - When React Router revalidates
+ */
+export async function clientLoader() {
+  // Get Supabase credentials from environment variables
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+  const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-  useEffect(() => {
-    async function fetchEvents() {
-      const { data, error } = await supabase
-        .from("events")
-        .select("*")
-        .order("date", { ascending: true });
+  // Construct API request
+  const url = `${supabaseUrl}/rest/v1/events?select=*&order=date.asc`;
 
-      if (error) {
-        console.error("Error fetching events:", error);
-      } else {
-        setEvents(data);
-      }
-      setLoading(false);
-    }
+  // Fetch data
+  const response = await fetch(url, {
+    headers: {
+      apikey: supabaseKey,
+      Authorization: `Bearer ${supabaseKey}`,
+    },
+  });
 
-    fetchEvents();
-  }, []);
-
-  if (loading) {
-    return <p className="text-center mt-8">Loading events...</p>;
+  // Error handling
+  if (!response.ok) {
+    throw new Error(`Failed to fetch events: ${response.status}`);
   }
 
-  if (!events.length) {
+  const events = await response.json();
+  return { events };
+}
+
+/**
+ * Events Page Component
+ *
+ * Displays a list of upcoming events.
+ * Key concepts:
+ * 1. useLoaderData(): Accesses pre-fetched data
+ * 2. COMPONENT COMPOSITION: Uses EventCard for reusable UI
+ * 3. CONDITIONAL RENDERING: Handles empty and loading states
+ * 4. ACCESSIBLE STRUCTURE: Semantic HTML for sections and headings
+ */
+import { useLoaderData } from "react-router";
+
+export default function Events() {
+  // Access loaded event data
+  const { events } = useLoaderData();
+
+  // Handle no results
+  if (!events?.length) {
     return <p className="text-center mt-8">No events found 😕</p>;
   }
 
@@ -44,3 +74,4 @@ export default function Events() {
     </section>
   );
 }
+
