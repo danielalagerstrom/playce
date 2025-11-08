@@ -1,12 +1,12 @@
 // Navbar.jsx
 import React from "react";
-import { Link, useLocation } from "react-router";
+import { Link, useLocation } from "react-router-dom";
 
 export default function Navbar() {
   const location = useLocation();
 
   const navItems = [
-    { label: "Home", path: "/", icon: "🏠" },
+    { label: "Explore", path: "/", icon: "🏠" },
     { label: "Events", path: "/events", icon: "📅" },
     { label: "Add", path: "/add", icon: "➕" },
     { label: "Chats", path: "/chat/new", icon: "💬" },

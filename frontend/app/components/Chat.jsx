@@ -1,5 +1,5 @@
 import React from "react";
-import { Form } from "react-router";
+import { Form } from "react-router-dom";
 
 /**
  * Chat Components
