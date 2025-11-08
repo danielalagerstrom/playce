@@ -36,6 +36,8 @@ export default function Home() {
           <EventCard key={event.id} event={event} />
         ))}
       </section>
+       <h2>PERSONAL RECORDS</h2>
+       
     </main>
   );
 }

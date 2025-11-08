@@ -13,7 +13,7 @@ function EventCard({
   event = {
     title: "Event Title",
     date: "Date not set",
-    time: "",
+    time: "Event Time",
     location: "",
     description: "Event description goes here...",
   },

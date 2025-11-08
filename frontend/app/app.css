@@ -79,6 +79,7 @@ h6 {
 
 h1 {
   font-size: 32px;
+  align-items: center;
 }
 h2 {
   font-size: 28px;
@@ -98,7 +99,7 @@ p {
 }
 
 .sidebar {
-  width: 560px;
+  width: 480px;
   background-color: var(--bg-secondary);
   border-right: 1px solid var(--border-light);
   display: flex;
@@ -121,9 +122,10 @@ p {
   border-bottom: 1px solid var(--border-light);
 }
 .chatbot-title {
-  font-size: 1.125rem;
+  font-size: 32px;
   font-weight: 600;
-  color: var(--text-primary);
+  align-items: center;
+  color: #ffe600;
   flex-grow: 1;
 }
 .new-chat-btn {
@@ -140,7 +142,7 @@ p {
   transition: background 0.1s ease;
 }
 .new-chat-btn:hover {
-  background: var(--bg-hover);
+  background: #ffe600;
 }
 
 /* Chat threads list */

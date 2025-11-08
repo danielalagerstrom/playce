@@ -58,6 +58,11 @@ export default function Add() {
         </label>
 
         <label>
+          Time:
+          <input type="time" name="time" required />
+        </label>
+
+        <label>
           Description:
           <textarea name="description" placeholder="Enter event description" rows={4} />
         </label>
