@@ -1,84 +1,71 @@
-import React from "react";
+// app/routes/events.jsx
+import { useLoaderData } from "react-router";
+import { EventCard } from "../components/EventCard.jsx";
 
 /**
- * Event Components
+ * CLIENT LOADER FUNCTION
  *
- * This file contains all event-related components for displaying events.
- * It demonstrates:
- * 1. LOGICAL GROUPING: Related components organized in one file
- * 2. COMPONENT HIERARCHY: EventCard -> EventList
- * 3. EXPORT PATTERNS: Multiple named exports for flexible use
- * 4. REUSABLE MODULES: Components can be imported anywhere in the app
- * 5. CLEAN DESIGN: Consistent component structure and code commenting
+ * Fetches all upcoming events from Supabase before the route renders.
+ * Key concepts:
+ * 1. ROUTE-LEVEL DATA LOADING: Runs before component renders
+ * 2. SUPABASE REST API: Direct fetch using environment variables
+ * 3. SECURE KEYS: Uses anon key and URL from .env
+ * 4. SORTING: Orders events by date (ascending)
  */
+export async function clientLoader() {
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+  const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+  const url = `${supabaseUrl}/rest/v1/events?select=*&order=date.asc`;
+
+  const response = await fetch(url, {
+    headers: {
+      apikey: supabaseKey,
+      Authorization: `Bearer ${supabaseKey}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch events: ${response.status}`);
+  }
+
+  const events = await response.json();
+
+  return { events };
+}
 
 /**
- * EventCard Component
+ * Events Page Component
  *
- * Displays a single event card with title, date, location, and description.
- * Uses PROPS DESTRUCTURING and DEFAULT VALUES for safe and readable code.
+ * Displays a list of upcoming events fetched from Supabase.
+ * Key concepts:
+ * 1. useLoaderData(): Retrieves data from the clientLoader
+ * 2. SEPARATION OF CONCERNS: Loader handles fetching, component handles rendering
+ * 3. REUSABLE COMPONENTS: Uses EventCard for each event item
  */
-function EventCard({
-  title = "Untitled Event",
-  date = "TBA",
-  time = "",
-  location = "Unknown location",
-  description = "",
-  participants = 0,
-  image_url = "",
-}) {
+export default function Events() {
+  const { events } = useLoaderData();
+
+  if (!events || events.length === 0) {
+    return (
+      <section className="px-4 py-6 text-center">
+        <h2 className="text-2xl font-semibold mb-4">Upcoming Events</h2>
+        <p>No events found 😕</p>
+      </section>
+    );
+  }
+
   return (
-    <div className="event-card">
-      {image_url && (
-        <img src={image_url} alt={title} className="event-card-image" />
-      )}
-      <div className="event-card-content">
-        <h3 className="event-card-title">{title}</h3>
-        <p className="event-card-date">
-          {date} {time && `• ${time}`}
-        </p>
-        <p className="event-card-location">{location}</p>
-        <p className="event-card-description">{description}</p>
-        <p className="event-card-participants">
-          👥 {participants} attending
-        </p>
+    <section className="px-4 py-6">
+      <h1 className="text-2xl font-semibold mb-6 text-center">
+        Upcoming Events
+      </h1>
+
+      <div className="grid gap-4">
+        {events.map((event) => (
+          <EventCard key={event.id} event={event} />
+        ))}
       </div>
-    </div>
+    </section>
   );
 }
-
-/**
- * EventList Component
- *
- * Renders a list of event cards based on fetched event data.
- * Uses DEFAULT VALUE [] for safety and prevents rendering errors.
- */
-function EventList({ events = [] }) {
-  return (
-    <div className="event-list">
-      {events.length > 0 ? (
-        events.map((event) => (
-          <EventCard
-            key={event.id}
-            title={event.title}
-            date={event.date}
-            time={event.time}
-            location={event.location}
-            description={event.description}
-            participants={event.participants}
-            image_url={event.image_url}
-          />
-        ))
-      ) : (
-        <p className="no-events">No events available right now.</p>
-      )}
-    </div>
-  );
-}
-
-/**
- * Named Exports
- *
- * We export both components individually so they can be reused or tested separately.
- */
-export { EventCard, EventList };
