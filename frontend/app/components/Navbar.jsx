@@ -9,7 +9,7 @@ export default function Navbar() {
     { label: "Explore", path: "/", icon: "🏠" },
     { label: "Events", path: "/events", icon: "📅" },
     { label: "Add", path: "/add", icon: "➕" },
-    { label: "Chats", path: "/chat/new", icon: "💬" },
+    { label: "Chats", path: "/chat", icon: "💬" },
     { label: "Profile", path: "/profile", icon: "👤" },
   ];
 

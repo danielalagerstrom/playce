@@ -1,71 +1,32 @@
-// app/routes/events.jsx
-import { useLoaderData } from "react-router";
-import { EventCard } from "../components/EventCard.jsx";
+import React from "react";
 
 /**
- * CLIENT LOADER FUNCTION
+ * EventCard Component
  *
- * Fetches all upcoming events from Supabase before the route renders.
+ * Reusable card for displaying an event.
  * Key concepts:
- * 1. ROUTE-LEVEL DATA LOADING: Runs before component renders
- * 2. SUPABASE REST API: Direct fetch using environment variables
- * 3. SECURE KEYS: Uses anon key and URL from .env
- * 4. SORTING: Orders events by date (ascending)
+ * 1. DESTRUCTURING: Extracts event properties directly
+ * 2. DEFAULT VALUES: Provides fallback if any property is missing
+ * 3. REUSABLE: Can be used anywhere an event card is needed
+ * 4. STYLING: Rounded corners, black background, yellow drop shadow
  */
-export async function clientLoader() {
-  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-  const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-
-  const url = `${supabaseUrl}/rest/v1/events?select=*&order=date.asc`;
-
-  const response = await fetch(url, {
-    headers: {
-      apikey: supabaseKey,
-      Authorization: `Bearer ${supabaseKey}`,
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error(`Failed to fetch events: ${response.status}`);
-  }
-
-  const events = await response.json();
-
-  return { events };
-}
-
-/**
- * Events Page Component
- *
- * Displays a list of upcoming events fetched from Supabase.
- * Key concepts:
- * 1. useLoaderData(): Retrieves data from the clientLoader
- * 2. SEPARATION OF CONCERNS: Loader handles fetching, component handles rendering
- * 3. REUSABLE COMPONENTS: Uses EventCard for each event item
- */
-export default function Events() {
-  const { events } = useLoaderData();
-
-  if (!events || events.length === 0) {
-    return (
-      <section className="px-4 py-6 text-center">
-        <h2 className="text-2xl font-semibold mb-4">Upcoming Events</h2>
-        <p>No events found 😕</p>
-      </section>
-    );
-  }
-
+function EventCard({
+  event = {
+    title: "Event Title",
+    date: "Date not set",
+    time: "Time not set",
+    location: "Location not set",
+    description: "Event description goes here...",
+  },
+}) {
   return (
-    <section className="px-4 py-6">
-      <h1 className="text-2xl font-semibold mb-6 text-center">
-        Upcoming Events
-      </h1>
-
-      <div className="grid gap-4">
-        {events.map((event) => (
-          <EventCard key={event.id} event={event} />
-        ))}
-      </div>
-    </section>
+    <div className="event-card">
+      <h2 className="event-title">{event.title}</h2>
+      <p className="event-date-time">{event.date} • {event.time}</p>
+      <p className="event-location">{event.location}</p>
+      <p className="event-description">{event.description}</p>
+    </div>
   );
 }
+
+export default EventCard;

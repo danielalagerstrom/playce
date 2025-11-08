@@ -1,105 +1,128 @@
-import React from "react";
-import { ChatMessages, ChatInput } from "../components/Chat.jsx";
+import { Outlet, useLoaderData, redirect } from "react-router";
+import Sidebar from "../components/Sidebar.jsx";
+import { ChatInput } from "../components/Chat.jsx";
 
 /**
- * INITIAL MESSAGES DATA
+ * CLIENT LOADER FUNCTION
  *
- * This data will be moved to component state to demonstrate:
- * 1. STATE MANAGEMENT: Converting static data to dynamic state
- * 2. STATE UPDATES: Adding new messages through user interaction
- * 3. LIFTING STATE UP: Managing state in parent component
- * 4. CALLBACK PROPS: Passing state update functions to child components
+ * Fetches the list of chat threads from Supabase before the layout renders.
+ * Key concepts:
+ * 1. PARENT ROUTE LOADER: Runs before any child route loaders
+ * 2. SHARED DATA: Data is available to this component and can be accessed by children
+ * 3. SUPABASE REST API: Direct HTTP calls to Supabase database
+ * 4. ENVIRONMENT VARIABLES: Secure way to store API credentials
+ * 5. QUERY PARAMETERS: Using URL parameters to filter and sort data
+ *
+ * This loader runs:
+ * - On initial page load
+ * - When navigating to any route under this layout
+ * - When React Router revalidates (after mutations)
  */
-const initialMessages = [
-  {
-    id: 1,
-    type: "user",
-    content: "Hello! Can you help me understand React Router v7?",
-  },
-  {
-    id: 2,
-    type: "bot",
-    content:
-      "Of course! React Router v7 is the latest version that introduces several improvements including better data loading, enhanced nested routing, and improved TypeScript support. What specific aspect would you like to learn about?",
-  },
-  {
-    id: 3,
-    type: "user",
-    content: "How do nested routes work in v7?",
-  },
-  {
-    id: 4,
-    type: "bot",
-    content:
-      "Nested routes in React Router v7 allow you to create hierarchical UI structures. You define parent routes that contain child routes, and use the <Outlet /> component to render child components. The parent route acts as a layout component that wraps its children.",
-  },
-  {
-    id: 5,
-    type: "user",
-    content: "What's the difference between route() and layout() helpers?",
-  },
-  {
-    id: 6,
-    type: "bot",
-    content:
-      "Great question! The route() helper creates routes that add URL segments, while layout() creates routes that only provide UI structure without affecting the URL. Layout routes are perfect for shared components like sidebars or headers that should appear across multiple pages.",
-  },
-  {
-    id: 7,
-    type: "user",
-    content: "Can you show me an example of a routes.js configuration?",
-  },
-  {
-    id: 8,
-    type: "bot",
-    content:
-      "Sure! Here's a basic example: You can use route(), index(), and layout() helpers to create nested route structures. The layout() function creates wrapper components, while route() adds URL segments. This approach gives you clean, hierarchical routing that's easy to maintain.",
-  },
-  {
-    id: 9,
-    type: "user",
-    content: "How do I handle data loading in React Router v7?",
-  },
-  {
-    id: 10,
-    type: "bot",
-    content:
-      "React Router v7 provides excellent data loading capabilities through loader functions. You can define a loader function in your route component that runs before the component renders, ensuring your data is available immediately. You can access the loaded data using the useLoaderData() hook within your component.",
-  },
-];
+export async function clientLoader() {
+  // Get Supabase credentials from environment variables
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+  const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+  // Construct the API endpoint URL
+  // - /rest/v1/threads: Access the threads table
+  // - select=*: Get all columns
+  // - order=created_at.desc: Sort by newest first
+  const url = `${supabaseUrl}/rest/v1/threads?select=*&order=created_at.desc`;
+
+  // Make the request with required Supabase headers
+  const response = await fetch(url, {
+    headers: {
+      apikey: supabaseKey, // Required for authentication
+      Authorization: `Bearer ${supabaseKey}`, // Required for authorization
+    },
+  });
+
+  // Check if the request was successful
+  if (!response.ok) {
+    throw new Error(`Failed to fetch threads: ${response.status}`);
+  }
+
+  // Parse the JSON response
+  const threads = await response.json();
+
+  return { threads };
+}
 
 /**
- * Home Component (Chat Page)
+ * CLIENT ACTION FUNCTION
  *
- * Now demonstrates STATE MANAGEMENT and CALLBACK PROPS:
- * 1. STATE HOOKS: Using useState to manage dynamic messages array
- * 2. CALLBACK FUNCTIONS: Creating functions to update state
- * 3. PROPS PASSING: Passing both data and functions to child components
- * 4. STATE LIFTING: Managing shared state in the parent component
- * 5. IMMUTABLE UPDATES: Using spread operator to update state arrays
+ * Handles thread deletion requests.
+ * Key concepts:
+ * 1. INTENT PATTERN: Uses form field to identify the action type
+ * 2. DELETE REQUEST: Sends DELETE request to Supabase
+ * 3. CASCADE DELETE: Supabase automatically deletes related messages
+ * 4. AUTOMATIC REVALIDATION: Loader re-runs to refresh thread list
+ *
+ * The action runs:
+ * - When a Form with method="post" is submitted
+ * - Checks the "intent" field to determine the action
  */
-export default function Home() {
-  // STATE: Convert static data to dynamic state
-  const [messages, setMessages] = React.useState(initialMessages);
+export async function clientAction({ request }) {
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+  const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-  // CALLBACK FUNCTION: Add new message to state array
-  const addMessage = (content) => {
-    const newMessage = {
-      id: messages.length + 1, // Simple ID generation
-      type: "user",
-      content: content,
-    };
+  // Extract form data
+  const formData = await request.formData();
+  const intent = formData.get("intent");
+  const threadId = formData.get("threadId");
 
-    // IMMUTABLE UPDATE: Create new array with spread operator
-    setMessages([...messages, newMessage]);
-  };
+  // Handle delete intent
+  if (intent === "delete" && threadId) {
+    try {
+      // DELETE request to Supabase
+      // Messages are automatically deleted due to CASCADE
+      const response = await fetch(
+        `${supabaseUrl}/rest/v1/threads?id=eq.${threadId}`,
+        {
+          method: "DELETE",
+          headers: {
+            apikey: supabaseKey,
+            Authorization: `Bearer ${supabaseKey}`,
+          },
+        },
+      );
+
+      if (!response.ok) {
+        return { error: `Failed to delete thread: ${response.status}` };
+      }
+
+      return { success: true };
+    } catch (error) {
+      return { error: error.message };
+    }
+  }
+
+  return null;
+}
+
+
+/**
+ * Layout Component
+ *
+ * Now uses DATA LOADING and MUTATIONS
+ * 
+ * Key concepts:
+ * 1. useLoaderData() HOOK: Accesses data from clientLoader
+ * 2. NO STATE MANAGEMENT: Data comes from loader, not useState
+ * 3. LAYOUT PATTERN: Wraps child routes with consistent UI (sidebar)
+ * 4. OUTLET: Renders the matched child route component
+ * 5. NO DELETE CALLBACK: Sidebar handles deletion with useFetcher
+ */
+export default function Chatlayout() {
+  // Access threads data from the loader
+  const { threads } = useLoaderData();
 
   return (
-    <main className="chat-container">
-      {/* Passing messages state as props - DATA FLOW! */}
-      <ChatMessages messages={messages} />
-      {/* Passing callback function as props - CALLBACK PROPS! */}
-      <ChatInput onAddMessage={addMessage} />
-    </main>
+    <div className="app-layout">
+      <Sidebar threads={threads} />
+      <main className="main-content">
+        <Outlet />
+      </main>
+    </div>
   );
 }
