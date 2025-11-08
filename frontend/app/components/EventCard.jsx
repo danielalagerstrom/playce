@@ -4,29 +4,40 @@ import React from "react";
  * EventCard Component
  *
  * Reusable card for displaying an event.
- * Key concepts:
- * 1. DESTRUCTURING: Extracts event properties directly
- * 2. DEFAULT VALUES: Provides fallback if any property is missing
- * 3. REUSABLE: Can be used anywhere an event card is needed
- * 4. STYLING: Rounded corners, black background, yellow drop shadow
+ * Includes:
+ * - Image placeholder or uploaded image
+ * - Title, date/time, location, description
+ * - Styled card with padding, shadow, rounded corners
  */
 function EventCard({
   event = {
     title: "Event Title",
     date: "Date not set",
-    time: "Time not set",
-    location: "Location not set",
+    time: "",
+    location: "",
     description: "Event description goes here...",
   },
 }) {
   return (
-    <div className="event-card">
-      <h2 className="event-title">{event.title}</h2>
-      <p className="event-date-time">{event.date} • {event.time}</p>
-      <p className="event-location">{event.location}</p>
-      <p className="event-description">{event.description}</p>
+    <div className="event-card bg-white shadow-md rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+
+      {/* Event Info */}
+      <div className="p-4 flex flex-col gap-2">
+        <h2 className="event-title text-lg font-semibold">{event.title}</h2>
+        <p className="event-date-time text-sm text-gray-600">
+          {event.date} {event.time && `• ${event.time}`}
+        </p>
+        {event.location && (
+          <p className="event-location text-sm text-gray-500">{event.location}</p>
+        )}
+        <p className="event-description text-sm text-gray-700">
+          {event.description}
+        </p>
+      </div>
     </div>
   );
 }
 
 export default EventCard;
+
+

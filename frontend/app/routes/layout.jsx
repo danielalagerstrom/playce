@@ -1,11 +1,21 @@
 // app/routes/layout.jsx
 import React from "react";
-import { Outlet } from "react-router";
+import { Outlet, useNavigate } from "react-router";
 import Navbar from "../components/Navbar.jsx";
 
 export default function Layout() {
+  const navigate = useNavigate();
+
   return (
     <div className="app-layout">
+      {/* Back button */}
+      <button
+        onClick={() => navigate(-1)}
+        className="back-btn"
+      >
+        ←
+      </button>
+
       {/* Main content rendered by routes */}
       <main className="main-content">
         <Outlet />
@@ -16,5 +26,6 @@ export default function Layout() {
     </div>
   );
 }
+
 
 

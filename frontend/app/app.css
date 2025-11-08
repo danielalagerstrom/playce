@@ -30,7 +30,7 @@
 /* Reset and base styles */
 * {
   margin: 0;
-  padding: 0;
+  padding: 16;
   box-sizing: border-box;
 }
 
@@ -42,6 +42,27 @@ body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  justify-content: center; /* centers content horizontally */
+  padding: 2rem 1rem;
+}
+
+.app-layout {
+  display: flex;
+  justify-content: center; /* centers all flex children horizontally */
+}
+
+
+.content-wrapper {
+  width: 100%;
+  max-width: 900px; /* limits content width */
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
 /* Typography */
@@ -77,7 +98,7 @@ p {
 }
 
 .sidebar {
-  width: 260px;
+  width: 560px;
   background-color: var(--bg-secondary);
   border-right: 1px solid var(--border-light);
   display: flex;
@@ -403,72 +424,6 @@ p {
   font-size: 0.875rem;
 }
 
-/* About page styles */
-.about-page {
-  max-width: 900px;
-  margin: 2.5rem auto;
-  padding: 2rem;
-  background: var(--bg-secondary);
-  border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.2);
-  color: var(--text-primary);
-}
-
-.about-page h1 {
-  font-size: 2rem;
-  margin-bottom: 0.5rem;
-}
-
-.about-page p {
-  color: var(--text-muted);
-  margin-bottom: 1rem;
-  max-width: 70ch;
-}
-
-.about-section {
-  margin-top: 1.5rem;
-  padding: 1rem;
-  background: var(--bg-primary);
-  border: 1px solid var(--border-medium);
-  border-radius: 8px;
-}
-
-.about-features {
-  margin-top: 0.75rem;
-}
-
-.about-features ul {
-  list-style: none;
-  padding: 0;
-  margin: 0.5rem 0 0 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 0.75rem;
-}
-
-.about-features li {
-  background: var(--bg-secondary);
-  padding: 0.75rem 1rem;
-  border-radius: 8px;
-  border: 1px solid var(--border-medium);
-  color: var(--text-primary);
-  font-size: 0.95rem;
-}
-
-.about-contact p {
-  color: var(--text-primary);
-}
-
-@media (max-width: 640px) {
-  .about-page {
-    margin: 1rem;
-    padding: 1rem;
-  }
-  .about-page h1 {
-    font-size: 1.5rem;
-  }
-}
-
 /* Layout container */
 .app-layout {
   display: flex;
@@ -497,7 +452,7 @@ p {
 
 /* Navbar links */
 .navbar a {
-  color: #f7f7f7;
+  color: #000;
   font-size: 0.85rem;
   text-align: center;
   display: flex;
@@ -511,11 +466,6 @@ p {
 /* Active link */
 .navbar a.active {
   color: #000; /* or any color to indicate active state */
-}
-
-/* Hover effect */
-.navbar a:hover {
-  color: #000;
 }
 
 /* Grid layout for events */
@@ -535,19 +485,11 @@ p {
   padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 36px;
+  padding: 8px;
   width: 100%; /* fill the grid column */
   max-width: 300px; /* optional, limits width on large screens */
   overflow: hidden;
-}
-
-/* Image inside the card */
-.event-card img {
-  width: 100%;
-  height: 150px;
-  object-fit: cover;
-  border-radius: 8px;
-  margin-bottom: 8px;
 }
 
 /* Event title */
@@ -668,4 +610,26 @@ p {
     font-size: 1.5rem;
   }
 }
+
+/* Back button styles */
+.back-btn {
+  position: fixed; /* stay in corner while scrolling */
+  top: 16px;       /* distance from top */
+  left: 16px;      /* distance from left */
+  background: var(--bg-primary); /* black like app background */
+  color: #fff;     /* white arrow */
+  border: none;
+  font-size: 1.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+  z-index: 100;    /* above other content */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+  transition: background 0.2s ease;
+}
+
+.back-btn:hover {
+  background: #11150f; /* slightly lighter on hover */
+}
+
 

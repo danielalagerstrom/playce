@@ -1,7 +1,7 @@
 // app/routes/add.jsx
 import { Form, useActionData } from "react-router";
 
-// CLIENT ACTION: handle POST to Supabase
+// CLIENT ACTION: handle POST to Supabase with image upload
 export async function clientAction({ request }) {
   const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
   const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
@@ -15,6 +15,7 @@ export async function clientAction({ request }) {
     return { error: "Title and date are required" };
   }
 
+  // Save event to Supabase
   try {
     const response = await fetch(`${supabaseUrl}/rest/v1/events`, {
       method: "POST",
@@ -45,7 +46,7 @@ export default function Add() {
   return (
     <div className="add-event-page">
       <h1>Add New Event</h1>
-      <Form method="post" className="event-form">
+      <Form method="post" encType="multipart/form-data" className="event-form">
         <label>
           Event Title:
           <input type="text" name="title" placeholder="Enter event title" required />
@@ -69,5 +70,6 @@ export default function Add() {
     </div>
   );
 }
+
 
 
