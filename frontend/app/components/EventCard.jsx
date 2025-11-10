@@ -5,7 +5,6 @@ import React from "react";
  *
  * Reusable card for displaying an event.
  * Includes:
- * - Image placeholder or uploaded image
  * - Title, date/time, location, description
  * - Styled card with padding, shadow, rounded corners
  */

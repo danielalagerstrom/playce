@@ -15,7 +15,32 @@ const sampleHome = [
     location: "",
     description: "Born in Spain, based in Aarhus. Mission: meet cool people and get to know new games. 🫶🏽 Favorite game: Ticket to Ride",
   },
+
+  {
+    id: 2,
+    title: "CONNECTIONS",
+    date: "0",
+    location: "",
+    description: "",
+  },
+  {
+    id: 3,
+    title: "EVENTS JOINED",
+    date: "0",
+    location: "",
+    description: "",
+  },
+
+  {
+    id: 4,
+    title: "STARTED CHATS",
+    date: "0",
+    location: "",
+    description: "",
+  },  
+
 ];
+
 
 /**
  * Events Page Component
@@ -29,7 +54,9 @@ const sampleHome = [
 export default function Home() {
   return (
     <main className="px-4 py-6">
-      <h1 className="text-2xl font-semibold mb-6 text-center">HEY SHEYLA 👋</h1>
+      <h1 className="text-2xl font-semibold mb-6 text-center">SHEYLA</h1>
+      <p>⌛️ 26 yo</p>
+      <p>🇪🇸 from Spain</p>
 
       <section className="grid gap-4">
         {sampleHome.map((event) => (
@@ -37,6 +64,11 @@ export default function Home() {
         ))}
       </section>
        <h2>PERSONAL RECORDS</h2>
+        <section className="grid gap-4 mt-4">
+        {sampleHome.map((event) => (
+          <EventCard key={event.id} event={event} />
+        ))}
+      </section>
        
     </main>
   );

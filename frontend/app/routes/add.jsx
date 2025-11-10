@@ -1,7 +1,7 @@
 // app/routes/add.jsx
 import { Form, useActionData } from "react-router";
 
-// CLIENT ACTION: handle POST to Supabase with image upload
+// CLIENT ACTION: handle POST to Supabase
 export async function clientAction({ request }) {
   const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
   const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;

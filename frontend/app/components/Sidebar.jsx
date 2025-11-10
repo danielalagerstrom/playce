@@ -30,7 +30,7 @@ function SidebarHeader() {
     <div className="sidebar-header">
       <h2 className="chatbot-title">Chats</h2>
       <Link to="/chat/new" className="new-chat-btn">
-        + New
+        +
       </Link>
     </div>
   );
@@ -127,7 +127,7 @@ function ChatThreadsList({ threads = [] }) {
         <input
           type="text"
           className="search-input"
-          placeholder="Search conversations..."
+          placeholder="🔍 Search..."
           value={searchValue}
           onChange={handleSearchChange}
         />
@@ -149,22 +149,7 @@ function ChatThreadsList({ threads = [] }) {
  * Handles the user profile section at the bottom of the sidebar.
  * Demonstrates component modularity and independence.
  */
-function SidebarFooter() {
-  return (
-    <div className="sidebar-footer">
-      <a href="/profile" className="user-profile">
-        <img
-          src="https://ui-avatars.com/api/?name=Batman&background=0D0D0D&color=fff&size=40"
-          alt="User avatar"
-          className="user-avatar"
-          width={30}
-          height={30}
-        />
-        <span className="user-name">Sheyla</span>
-      </a>
-    </div>
-  );
-}
+
 
 /**
  * Main Sidebar Component
@@ -182,7 +167,7 @@ export default function Sidebar({ threads }) {
       {/* Component composition - no callback prop drilling needed */}
       <SidebarHeader />
       <ChatThreadsList threads={threads} />
-      <SidebarFooter />
+   
     </aside>
   );
 }

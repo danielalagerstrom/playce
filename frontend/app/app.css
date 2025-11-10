@@ -29,7 +29,7 @@
 
 /* Reset and base styles */
 * {
-  margin: 0;
+  margin: 24;
   padding: 16;
   box-sizing: border-box;
 }
@@ -100,7 +100,7 @@ p {
 
 .sidebar {
   width: 480px;
-  background-color: var(--bg-secondary);
+  background-color: #090c08;
   border-right: 1px solid var(--border-light);
   display: flex;
   flex-direction: column;
@@ -132,11 +132,9 @@ p {
   display: flex;
   align-items: center;
   background: transparent;
-  color: var(--text-primary);
-  border: 1px solid var(--border-medium);
-  border-radius: 6px;
+  color: #f7f7f7;
   padding: 0.5rem;
-  font-size: 0.875rem;
+  font-size: 16px;
   text-decoration: none;
   cursor: pointer;
   transition: background 0.1s ease;
@@ -162,7 +160,7 @@ p {
   border: 1px solid var(--border-medium);
   border-radius: 6px;
   padding: 0.5rem 0.75rem;
-  font-size: 0.875rem;
+  font-size: 16px;
   background: var(--bg-primary);
   color: var(--text-primary);
   outline: none;
@@ -268,32 +266,6 @@ p {
   color: #ef4444;
 }
 
-/* Sidebar footer */
-.sidebar-footer {
-  border-top: 1px solid var(--border-light);
-}
-.user-profile {
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.1s ease;
-}
-.user-profile:hover {
-  background: var(--bg-hover);
-}
-.user-avatar {
-  border-radius: 50%;
-  border: none;
-}
-.user-name {
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--text-primary);
-}
 
 /* Chat interface styles */
 .chat-container {
@@ -344,15 +316,15 @@ p {
 }
 
 .user-message .message-content {
-  background-color: var(--bg-message-user);
-  color: var(--text-primary);
+  background-color: #ffe600;
+  color: black;
   border: 1px solid var(--border-medium);
   border-bottom-right-radius: 4px;
 }
 
 .bot-message .message-content {
-  background-color: var(--bg-message-bot);
-  color: var(--text-primary);
+  background-color: #FEBCBC;
+  color: black;
   border: none;
   border-bottom-left-radius: 4px;
 }
@@ -467,30 +439,22 @@ p {
 
 /* Active link */
 .navbar a.active {
-  color: #000; /* or any color to indicate active state */
-}
-
-/* Grid layout for events */
-.events-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* 3 per row if enough space */
-  gap: 20px; /* space between cards */
-  padding: 20px;
+  color: #FF4D8B; /*  active state */
 }
 
 /* EventCard container */
 .event-card {
-  background-color: #000000;
-  color: #ffffff;
+  background-color: #090C08;
+  color: #F7F7F7;
   border-radius: 8px;
   box-shadow: 0 4px 10px #ffe600; /* yellow drop shadow */
   padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 36px;
-  padding: 8px;
+  gap: 72px;
+  padding: 16px;
   width: 100%; /* fill the grid column */
-  max-width: 300px; /* optional, limits width on large screens */
+  max-width: 500px; /* optional, limits width on large screens */
   overflow: hidden;
 }
 
@@ -530,7 +494,7 @@ p {
 }
 
 .add-event-page .event-card {
-  background: var(--bg-secondary);
+  background: #090C08;
   border: 1px solid var(--border-medium);
   padding: 1.25rem;
   border-radius: 12px;
@@ -547,7 +511,7 @@ p {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  font-size: 0.95rem;
+  font-size: 16px;
   color: var(--text-muted);
 }
 
@@ -560,7 +524,7 @@ p {
   border-radius: 8px;
   padding: 0.75rem 0.9rem;
   font-family: inherit;
-  font-size: 0.95rem;
+  font-size: 16px;
   outline: none;
 }
 
@@ -603,15 +567,7 @@ p {
   border: 1px solid rgba(255,230,0,0.12);
 }
 
-@media (max-width: 640px) {
-  .add-event-page {
-    margin: 1rem;
-    padding: 0;
-  }
-  .add-event-page h1 {
-    font-size: 1.5rem;
-  }
-}
+
 
 /* Back button styles */
 .back-btn {
@@ -619,7 +575,7 @@ p {
   top: 16px;       /* distance from top */
   left: 16px;      /* distance from left */
   background: var(--bg-primary); /* black like app background */
-  color: #fff;     /* white arrow */
+  color: #f7f7f7;     /* white arrow */
   border: none;
   font-size: 1.5rem;
   padding: 0.5rem 0.75rem;
