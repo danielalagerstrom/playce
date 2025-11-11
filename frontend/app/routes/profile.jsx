@@ -63,13 +63,10 @@ export default function Home() {
           <EventCard key={event.id} event={event} />
         ))}
       </section>
-       <h2>PERSONAL RECORDS</h2>
-        <section className="grid gap-4 mt-4">
-        {sampleHome.map((event) => (
-          <EventCard key={event.id} event={event} />
-        ))}
-      </section>
-       
+      <h2> EVENTS YOUR ARE HOSTING</h2>
+        <p>Nothing planned yet!</p>
+       <h2> CONNECTIONS</h2>
+        <p>You have no connections yet.</p>
     </main>
   );
 }

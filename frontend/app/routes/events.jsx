@@ -50,7 +50,7 @@ export default function Events() {
 
   return (
     <section className="px-4 py-6">
-      <h1 className="text-2xl font-semibold mb-6 text-center">Upcoming Events</h1>
+      <h1 className="text-2xl font-semibold mb-6 text-center">Playce Events</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {events.map((event) => (
           <EventCard key={event.id} event={event} />
